@@ -10,6 +10,7 @@ logger:
 # Enable Home Assistant API
 api:
 
+# should set these to secrets
 ota:
   password: "2f6e5dfff285a1a45af0136694359ddb"
 
