@@ -1,0 +1,54 @@
+esphome:
+  name: garage-sensor
+  project:
+    name: psyciknz.garage-sensor
+    version: "2.0.0"
+  comment: "Garage door reed sensor"
+
+esp8266:
+  board: d1_mini
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+mqtt:
+  broker: !secret mqtt_ip
+  #username: !secret mosquitto_username
+  #password: !secret mosquitto_password
+  topic_prefix: !secret mqtt_prefix
+
+ota:
+  password: "42e5b4b437dee84506bdcdc5f09658d7"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  domain: !secret wifi_network
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Garage-Sensor Fallback Hotspot"
+    password: "cv6hRjgELZF4"
+
+captive_portal:
+
+
+binary_sensor:
+  platform: gpio
+  pin:
+    number: D1
+    mode: INPUT_PULLUP
+    inverted: True
+  name: 'Garage Door'
+  device_class: door
+
+button:
+  - platform: restart
+    name: Garage $friendly_name Reboot
+    
+  - platform: safe_mode
+    name: Garage $friendly_name Safe Mode
+

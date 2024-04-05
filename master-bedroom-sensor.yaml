@@ -1,0 +1,6 @@
+substitutions:
+  devicename: master-bedroom-sensor
+  friendlyname: Master Bedroom
+  devicepin: D4 
+
+<<: !include temperature-sensor-common.yaml

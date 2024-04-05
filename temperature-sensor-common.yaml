@@ -1,0 +1,45 @@
+esphome:
+  name: $devicename
+  project:
+    name: psyciknz.temperature-sensor
+    version: "2.0.0"
+  comment: "DHT22 Based Temperatre sensor common code.  Use includes statement"
+
+esp8266:
+  board: d1_mini
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+  password: "2f6e5dfff285a1a45af0136694359ddb"
+
+mqtt:
+  broker: !secret mqtt_ip
+  topic_prefix: !secret mqtt_prefix
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  domain: !secret wifi_network
+
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "${devicename}"
+    password: "password"
+
+captive_portal:
+
+sensor:
+- platform: dht
+  pin: $devicepin
+  model: DHT22
+  # ...
+  temperature:
+    name: ${friendlyname} Temperature
+  humidity:
+    name: ${friendlyname} Humidity
