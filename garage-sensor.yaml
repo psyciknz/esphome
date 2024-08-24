@@ -1,9 +1,11 @@
+substitutions:
+  friendlyname: Garage
 esphome:
-  name: garage-sensor
+  name: garage-door-sensor
   project:
     name: psyciknz.garage-sensor
     version: "2.0.0"
-  comment: "Garage door reed sensor"
+  comment: "Garage door reed sensor and cover"
 
 esp8266:
   board: d1_mini
@@ -21,6 +23,7 @@ mqtt:
   topic_prefix: !secret mqtt_prefix
 
 ota:
+  platform: esphome
   password: "42e5b4b437dee84506bdcdc5f09658d7"
 
 wifi:
@@ -37,18 +40,44 @@ captive_portal:
 
 
 binary_sensor:
-  platform: gpio
-  pin:
-    number: D1
-    mode: INPUT_PULLUP
-    inverted: True
-  name: 'Garage Door'
-  device_class: door
+  - platform: gpio
+    pin:
+     number: D2
+     mode: INPUT_PULLUP
+     inverted: True
+    id: contact
+    name: 'Door Sensor'
+    device_class: garage_door
+
+  - platform: status
+    name: "${friendlyname} Sensor Status"
 
 button:
   - platform: restart
-    name: Garage $friendly_name Reboot
+    name: ${friendlyname}  Reboot
     
   - platform: safe_mode
-    name: Garage $friendly_name Safe Mode
+    name: ${friendlyname}  Safe Mode
 
+sensor:
+  - platform: uptime
+    name: "${friendlyname} Uptime"
+    disabled_by_default: true
+
+  - platform: wifi_signal
+    name: "${friendlyname} WiFi Signal"
+    update_interval: 60s
+
+cover:
+  - platform: template
+    device_class: garage
+    name: "${friendlyname}"
+    lambda: "return id(contact).state ? COVER_OPEN : COVER_CLOSED;"
+    open_action:
+      mqtt.publish:
+        topic: "paradox/control/outputs/Garage_Door"
+        payload: "pulse"
+    close_action:
+      mqtt.publish:
+        topic: "paradox/control/outputs/Garage_Door"
+        payload: "pulse"

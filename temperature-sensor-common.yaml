@@ -15,6 +15,7 @@ logger:
 api:
 
 ota:
+  platform: esphome
   password: "2f6e5dfff285a1a45af0136694359ddb"
 
 mqtt:
